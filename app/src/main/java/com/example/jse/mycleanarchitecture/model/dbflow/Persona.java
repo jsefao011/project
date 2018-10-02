@@ -17,9 +17,7 @@ public class Persona extends BaseModel {
     @Column
     private String nombres;
     @Column
-    private String apellidoPaterno;
-    @Column
-    private String apellidoMaterno;
+    private String apellidos;
     @Column
     private String celular;
     @Column
@@ -41,20 +39,12 @@ public class Persona extends BaseModel {
         this.nombres = nombres;
     }
 
-    public String getApellidoPaterno() {
-        return apellidoPaterno;
+    public String getApellidos() {
+        return apellidos;
     }
 
-    public void setApellidoPaterno(String apellidoPaterno) {
-        this.apellidoPaterno = apellidoPaterno;
-    }
-
-    public String getApellidoMaterno() {
-        return apellidoMaterno;
-    }
-
-    public void setApellidoMaterno(String apellidoMaterno) {
-        this.apellidoMaterno = apellidoMaterno;
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
     }
 
     public String getCelular() {
