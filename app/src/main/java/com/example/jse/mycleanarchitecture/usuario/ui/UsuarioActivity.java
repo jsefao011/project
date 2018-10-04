@@ -2,6 +2,7 @@ package com.example.jse.mycleanarchitecture.usuario.ui;
 
 import android.os.Bundle;
 import android.support.constraint.Group;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,11 +11,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.jse.mycleanarchitecture.R;
+import com.example.jse.mycleanarchitecture.base.UseCaseHandler;
+import com.example.jse.mycleanarchitecture.base.UseCaseThreadPoolScheduler;
 import com.example.jse.mycleanarchitecture.usuario.UsuarioPresenter;
 import com.example.jse.mycleanarchitecture.usuario.UsuarioPresenterImpl;
+import com.example.jse.mycleanarchitecture.usuario.data.source.UsuarioRepository;
+import com.example.jse.mycleanarchitecture.usuario.data.source.local.UsuarioLocalDataSource;
+import com.example.jse.mycleanarchitecture.usuario.data.source.remote.UsuarioRemoteDataSource;
+import com.example.jse.mycleanarchitecture.usuario.domain.usecase.GetPersonas;
+import com.example.jse.mycleanarchitecture.usuario.domain.usecase.SavePersona;
 import com.example.jse.mycleanarchitecture.usuario.entities.UsuarioUi;
 import com.example.jse.mycleanarchitecture.usuario.listener.UsuarioListener;
 import com.example.jse.mycleanarchitecture.usuario.ui.adapter.UsuarioAdapter;
@@ -41,6 +50,16 @@ public class UsuarioActivity extends AppCompatActivity implements UsuarioView, U
     RecyclerView rcUsuario;
     @BindView(R.id.grupo_formulario_persona)
     Group grupoFormularioPersona;
+    @BindView(R.id.inp_usuario)
+    TextInputEditText inpUsuario;
+    @BindView(R.id.inp_password)
+    TextInputEditText inpPassword;
+    @BindView(R.id.floatingActionButton)
+    FloatingActionButton floatingActionButton;
+    @BindView(R.id.btn_guardar)
+    Button btnGuardar;
+    @BindView(R.id.btn_cancelar)
+    Button btnCancelar;
     private UsuarioPresenter usuarioPresenter;
     private UsuarioAdapter usuarioAdapter;
 
@@ -57,7 +76,7 @@ public class UsuarioActivity extends AppCompatActivity implements UsuarioView, U
     }
 
     private void setupAdapterPersona() {
-        usuarioAdapter = new UsuarioAdapter(new ArrayList<UsuarioUi>(),this);
+        usuarioAdapter = new UsuarioAdapter(new ArrayList<UsuarioUi>(), this);
         usuarioAdapter.setRecyclerView(rcUsuario);
         rcUsuario.setAdapter(usuarioAdapter);
         rcUsuario.setLayoutManager(new LinearLayoutManager(this));
@@ -65,7 +84,15 @@ public class UsuarioActivity extends AppCompatActivity implements UsuarioView, U
     }
 
     private void setupPresenter() {
-        usuarioPresenter = new UsuarioPresenterImpl();
+        usuarioPresenter = new UsuarioPresenterImpl(new UseCaseHandler(new UseCaseThreadPoolScheduler()),
+                new SavePersona(UsuarioRepository.getINSTANCE(
+                        new UsuarioLocalDataSource(),
+                        new UsuarioRemoteDataSource()
+                )),
+                new GetPersonas(UsuarioRepository.getINSTANCE(
+                        new UsuarioLocalDataSource(),
+                        new UsuarioRemoteDataSource()
+                )));
         setPresenter(usuarioPresenter);
     }
 
@@ -133,13 +160,6 @@ public class UsuarioActivity extends AppCompatActivity implements UsuarioView, U
     public void onBackPressed() {
         super.onBackPressed();
         usuarioPresenter.onBackPressed();
-    }
-
-
-
-    @OnClick(R.id.appbar)
-    public void onClickCrearPersona() {
-        usuarioPresenter.onClickCrearPersona();
     }
 
 
@@ -214,6 +234,16 @@ public class UsuarioActivity extends AppCompatActivity implements UsuarioView, U
     }
 
     @Override
+    public void setNombreUSuario(String nombreUSuario) {
+        inpUsuario.setText(nombreUSuario);
+    }
+
+    @Override
+    public void setPassword(String password) {
+        inpPassword.setText(password);
+    }
+
+    @Override
     public void showMenssage(String mensaje) {
         Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show();
     }
@@ -226,5 +256,30 @@ public class UsuarioActivity extends AppCompatActivity implements UsuarioView, U
     @Override
     public void onClickRemoveUsuario(UsuarioUi usuarioUi) {
         usuarioPresenter.onClickRemoveUsuario(usuarioUi);
+    }
+
+    @OnClick(R.id.floatingActionButton)
+    public void onViewClicked() {
+        usuarioPresenter.onClickCrearUsuario();
+        /**usuarioPresenter.onClickSaveUsuario(inpTextNombre.getText().toString(),
+         inpTextApellido.getText().toString(), inpTelefono.getText().toString(),
+         inpUsuario.getText().toString(),
+         inpPassword.getText().toString()
+         );*/
+    }
+
+    @OnClick({R.id.btn_guardar, R.id.btn_cancelar})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btn_guardar:
+                usuarioPresenter.onClickSaveUsuario(inpTextNombre.getText().toString(),
+                        inpTextApellido.getText().toString(), inpTelefono.getText().toString(),
+                        inpUsuario.getText().toString(),
+                        inpPassword.getText().toString());
+                break;
+            case R.id.btn_cancelar:
+                usuarioPresenter.onClickCancelarUsuario();
+                break;
+        }
     }
 }

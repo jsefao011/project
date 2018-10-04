@@ -10,7 +10,11 @@ import com.example.jse.mycleanarchitecture.usuario.ui.UsuarioView;
  */
 
 public interface UsuarioPresenter extends BasePresenter<UsuarioView> {
-    void onClickCrearPersona();
+    void onClickCrearUsuario();
     void onClickUsuario(UsuarioUi usuarioUi);
     void onClickRemoveUsuario(UsuarioUi usuarioUi);
+    void onClickSaveUsuario(String nombre, String apellido, String telefono, String usuario, String password);
+
+    void onClickCancelarUsuario();
 }
+

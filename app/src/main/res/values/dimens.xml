@@ -1,5 +1,5 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="app_bar_height">200</dimen>
-    <dimen name="expanded_toolbar_title_margin_start">Hola :)</dimen>
+    <dimen name="app_bar_height">200dp</dimen>
+    <dimen name="expanded_toolbar_title_margin_start">100dp</dimen>
 </resources>

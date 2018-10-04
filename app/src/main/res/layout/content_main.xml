@@ -80,8 +80,8 @@
         android:id="@+id/grupo_formulario_persona"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="textView,inp_lay_telefono,inp_lay_apellido,inp_lay_nombre" />
+        android:visibility="visible"
+        app:constraint_referenced_ids="textView,inp_lay_telefono,inp_lay_apellido,inp_lay_nombre, inp_lay_usuario, inp_lay_password, btn_guardar, btn_cancelar" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rc_usuario"
@@ -91,11 +91,69 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inp_lay_telefono" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/inp_lay_usuario"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inp_lay_telefono">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/inp_usuario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Usuario"
+            tools:text="Sol" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/inp_lay_password"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inp_lay_usuario">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/inp_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password" />
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_guardar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Guardar"
+        app:layout_constraintEnd_toStartOf="@+id/btn_cancelar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inp_lay_password" />
+
+    <Button
+        android:id="@+id/btn_cancelar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Cancelar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inp_lay_password" />
 
 
 </android.support.constraint.ConstraintLayout>

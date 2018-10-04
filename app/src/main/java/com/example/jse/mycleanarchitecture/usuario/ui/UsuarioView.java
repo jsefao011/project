@@ -27,6 +27,11 @@ public interface UsuarioView extends BaseView<UsuarioPresenter> {
     void errorApellidoPersona(String error);
     void setTelefonoPersona(String telefono);
     void errorTelefonoPersona(String error);
-    
+
+    void setNombreUSuario(String nombreUSuario);
+    void setPassword(String password);
+
+
+
     void showMenssage(String mensaje);
 }
