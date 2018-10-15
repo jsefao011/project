@@ -13,4 +13,10 @@ public interface UsuarioDataSource {
     void guardarUsuario(UsuarioUi usuarioUi, Callback<UsuarioUi> callback);
 
     void listarUsuario(Callback<List<UsuarioUi>> callback);
+
+    void eliminarUsuario(UsuarioUi usuarioUi, Callback<UsuarioUi> callback);
+
+    void editarUsuario(UsuarioUi usuarioUi, Callback<UsuarioUi> callback);
+
+    void getUsuario(UsuarioUi usuarioUi, Callback<UsuarioUi> callback);
 }

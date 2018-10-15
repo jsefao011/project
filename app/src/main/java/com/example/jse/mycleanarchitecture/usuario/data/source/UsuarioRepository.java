@@ -36,5 +36,23 @@ public class UsuarioRepository implements  UsuarioDataSource{
         usuarioLocalDataSource.listarUsuario(callback);
     }
 
+    @Override
+    public void eliminarUsuario(UsuarioUi usuarioUi, Callback<UsuarioUi> callback) {
+        usuarioLocalDataSource.eliminarUsuario(usuarioUi, callback);
+        usuarioRemoteDataSource.eliminarUsuario(usuarioUi, callback);
+    }
+
+    @Override
+    public void editarUsuario(UsuarioUi usuarioUi, Callback<UsuarioUi> callback) {
+        usuarioLocalDataSource.editarUsuario(usuarioUi, callback);
+        usuarioRemoteDataSource.editarUsuario(usuarioUi, callback);
+    }
+
+    @Override
+    public void getUsuario(UsuarioUi usuarioUi, Callback<UsuarioUi> callback) {
+        usuarioLocalDataSource.getUsuario(usuarioUi, callback);
+        usuarioRemoteDataSource.getUsuario(usuarioUi, callback);
+    }
+
 
 }

@@ -31,11 +31,15 @@ public class UsuarioHolder extends RecyclerView.ViewHolder implements View.OnCli
     TextView textNombre;
     @BindView(R.id.img_delete)
     ImageView imgDelete;
+    @BindView(R.id.img_edit)
+    ImageView imgEdit;
+
 
     public UsuarioHolder(View view) {
         super(view);
         ButterKnife.bind(this, view);
         imgDelete.setOnClickListener(this);
+        imgEdit.setOnClickListener(this);
         itemView.setOnClickListener(this);
     }
 
@@ -55,9 +59,11 @@ public class UsuarioHolder extends RecyclerView.ViewHolder implements View.OnCli
             case R.id.img_delete:
                 listener.onClickRemoveUsuario(usuarioUi);
                 break;
-                default:
-                    listener.onClickUsuario(usuarioUi);
-                    break;
+            case R.id.img_edit:
+                listener.onCLickTraerUsuario(usuarioUi);
+            default:
+                 //listener.onClickUsuario(usuarioUi);
+                 break;
         }
     }
 }

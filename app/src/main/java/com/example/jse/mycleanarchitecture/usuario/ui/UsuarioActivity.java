@@ -17,13 +17,18 @@ import android.widget.Toast;
 import com.example.jse.mycleanarchitecture.R;
 import com.example.jse.mycleanarchitecture.base.UseCaseHandler;
 import com.example.jse.mycleanarchitecture.base.UseCaseThreadPoolScheduler;
+import com.example.jse.mycleanarchitecture.model.dbflow.Persona;
 import com.example.jse.mycleanarchitecture.usuario.UsuarioPresenter;
 import com.example.jse.mycleanarchitecture.usuario.UsuarioPresenterImpl;
 import com.example.jse.mycleanarchitecture.usuario.data.source.UsuarioRepository;
 import com.example.jse.mycleanarchitecture.usuario.data.source.local.UsuarioLocalDataSource;
 import com.example.jse.mycleanarchitecture.usuario.data.source.remote.UsuarioRemoteDataSource;
+import com.example.jse.mycleanarchitecture.usuario.domain.usecase.DeletePersona;
 import com.example.jse.mycleanarchitecture.usuario.domain.usecase.GetPersonas;
+import com.example.jse.mycleanarchitecture.usuario.domain.usecase.GetUsuario;
 import com.example.jse.mycleanarchitecture.usuario.domain.usecase.SavePersona;
+import com.example.jse.mycleanarchitecture.usuario.domain.usecase.UpdatePersona;
+import com.example.jse.mycleanarchitecture.usuario.entities.PersonUi;
 import com.example.jse.mycleanarchitecture.usuario.entities.UsuarioUi;
 import com.example.jse.mycleanarchitecture.usuario.listener.UsuarioListener;
 import com.example.jse.mycleanarchitecture.usuario.ui.adapter.UsuarioAdapter;
@@ -90,6 +95,18 @@ public class UsuarioActivity extends AppCompatActivity implements UsuarioView, U
                         new UsuarioRemoteDataSource()
                 )),
                 new GetPersonas(UsuarioRepository.getINSTANCE(
+                        new UsuarioLocalDataSource(),
+                        new UsuarioRemoteDataSource()
+                )),
+                new DeletePersona(UsuarioRepository.getINSTANCE(
+                                new UsuarioLocalDataSource(),
+                                new UsuarioRemoteDataSource()
+                )),
+                new UpdatePersona(UsuarioRepository.getINSTANCE(
+                        new UsuarioLocalDataSource(),
+                        new UsuarioRemoteDataSource()
+                )),
+                new GetUsuario(UsuarioRepository.getINSTANCE(
                         new UsuarioLocalDataSource(),
                         new UsuarioRemoteDataSource()
                 )));
@@ -190,8 +207,10 @@ public class UsuarioActivity extends AppCompatActivity implements UsuarioView, U
 
     @Override
     public void updateUsuario(UsuarioUi usuarioUi) {
+        usuarioPresenter.onClickUsuario(usuarioUi);
         usuarioAdapter.update(usuarioUi);
     }
+
 
     @Override
     public void addUsuario(UsuarioUi usuarioUi) {
@@ -249,13 +268,33 @@ public class UsuarioActivity extends AppCompatActivity implements UsuarioView, U
     }
 
     @Override
+    public void removeItemUser(UsuarioUi usuarioUi) {
+        usuarioAdapter.remove(usuarioUi);
+    }
+
+    @Override
     public void onClickUsuario(UsuarioUi usuarioUi) {
         usuarioPresenter.onClickUsuario(usuarioUi);
+        setNombreUSuario(usuarioUi.getNombre());
+        setPassword(usuarioUi.getClave());
+        PersonUi personUi = usuarioUi.getPersonUi();
+        setNombrePersona(personUi.getNombre());
+        setApellidoPersona(personUi.getApellido());
+        setTelefonoPersona(personUi.getTelefono());
     }
 
     @Override
     public void onClickRemoveUsuario(UsuarioUi usuarioUi) {
         usuarioPresenter.onClickRemoveUsuario(usuarioUi);
+        usuarioAdapter.remove(usuarioUi);
+    }
+
+
+
+    @Override
+    public void onCLickTraerUsuario(UsuarioUi usuarioUi) {
+        usuarioPresenter.onClickGetUsuario(usuarioUi);
+        onClickUsuario(usuarioUi);
     }
 
     @OnClick(R.id.floatingActionButton)
@@ -272,11 +311,18 @@ public class UsuarioActivity extends AppCompatActivity implements UsuarioView, U
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_guardar:
-                usuarioPresenter.onClickSaveUsuario(inpTextNombre.getText().toString(),
+
+                /*usuarioPresenter.onClickSaveUsuario(inpTextNombre.getText().toString(),
+                        inpTextApellido.getText().toString(), inpTelefono.getText().toString(),
+                        inpUsuario.getText().toString(),
+                        inpPassword.getText().toString());*/
+
+                usuarioPresenter.onClickUpdate(inpTextNombre.getText().toString(),
                         inpTextApellido.getText().toString(), inpTelefono.getText().toString(),
                         inpUsuario.getText().toString(),
                         inpPassword.getText().toString());
                 break;
+
             case R.id.btn_cancelar:
                 usuarioPresenter.onClickCancelarUsuario();
                 break;

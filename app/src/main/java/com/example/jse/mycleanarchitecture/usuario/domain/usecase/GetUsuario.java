@@ -5,35 +5,26 @@ import com.example.jse.mycleanarchitecture.usuario.data.source.UsuarioDataSource
 import com.example.jse.mycleanarchitecture.usuario.data.source.UsuarioRepository;
 import com.example.jse.mycleanarchitecture.usuario.entities.UsuarioUi;
 
-
-/**
- * Created by Jse on 02/10/2018.
- */
-
-public class DeletePersona extends UseCase<DeletePersona.Request, DeletePersona.Response>{
-
+public class GetUsuario extends UseCase<GetUsuario.Request, GetUsuario.Response> {
 
     private UsuarioRepository usuarioRepository;
 
-    public DeletePersona(UsuarioRepository usuarioRepository) {
+    public GetUsuario(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
-
     @Override
-    protected void executeUseCase(DeletePersona.Request requestValues) {
-        usuarioRepository.eliminarUsuario(requestValues.getUsuarioUiId(), new UsuarioDataSource.Callback<UsuarioUi>() {
+    protected void executeUseCase(GetUsuario.Request requestValues) {
+        usuarioRepository.guardarUsuario(requestValues.getUsuarioUi(), new UsuarioDataSource.Callback<UsuarioUi>() {
             @Override
             public void onLoad(boolean success, UsuarioUi item) {
                 if (success) {
-                    getUseCaseCallback().onSuccess(new DeletePersona.Response(item));
+                    getUseCaseCallback().onSuccess(new GetUsuario.Response(item));
                 }else {
                     getUseCaseCallback().onError();
                 }
             }
         });
     }
-
-
 
     public static class Response implements UseCase.ResponseValue{
         private UsuarioUi usuarioUi;
@@ -42,7 +33,7 @@ public class DeletePersona extends UseCase<DeletePersona.Request, DeletePersona.
             this.usuarioUi = usuarioUi;
         }
 
-        public UsuarioUi getUsuarioUiId() {
+        public UsuarioUi getUsuarioUi() {
             return usuarioUi;
         }
     }
@@ -54,7 +45,7 @@ public class DeletePersona extends UseCase<DeletePersona.Request, DeletePersona.
             this.usuarioUi = usuarioUi;
         }
 
-        public UsuarioUi getUsuarioUiId() {
+        public UsuarioUi getUsuarioUi() {
             return usuarioUi;
         }
     }

@@ -15,4 +15,19 @@ public class UsuarioRemoteDataSource implements UsuarioDataSource {
     public void listarUsuario(Callback<List<UsuarioUi>> callback) {
 
     }
+
+    @Override
+    public void eliminarUsuario(UsuarioUi usuarioUi, Callback<UsuarioUi> callback) {
+
+    }
+
+    @Override
+    public void editarUsuario(UsuarioUi usuarioUi, Callback<UsuarioUi> callback) {
+
+    }
+
+    @Override
+    public void getUsuario(UsuarioUi usuarioUi, Callback<UsuarioUi> callback) {
+
+    }
 }

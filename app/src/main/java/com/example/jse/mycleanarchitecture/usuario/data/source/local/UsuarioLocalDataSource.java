@@ -1,5 +1,7 @@
 package com.example.jse.mycleanarchitecture.usuario.data.source.local;
 
+import android.util.Log;
+
 import com.example.jse.mycleanarchitecture.model.dbflow.Persona;
 import com.example.jse.mycleanarchitecture.model.dbflow.Persona_Table;
 import com.example.jse.mycleanarchitecture.model.dbflow.Usuario;
@@ -7,6 +9,7 @@ import com.example.jse.mycleanarchitecture.model.dbflow.Usuario_Table;
 import com.example.jse.mycleanarchitecture.usuario.data.source.UsuarioDataSource;
 import com.example.jse.mycleanarchitecture.usuario.entities.PersonUi;
 import com.example.jse.mycleanarchitecture.usuario.entities.UsuarioUi;
+import com.raizlabs.android.dbflow.sql.SqlUtils;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
@@ -28,6 +31,7 @@ public class UsuarioLocalDataSource implements UsuarioDataSource {
 
 
             PersonUi personUi = usuarioUi.getPersonUi();
+
             Persona nuevaPersona = new Persona();
             nuevaPersona.setNombres(personUi.getNombre());
             nuevaPersona.setApellidos(personUi.getApellido());
@@ -95,5 +99,94 @@ public class UsuarioLocalDataSource implements UsuarioDataSource {
 
         callback.onLoad(true, usuarioUiList);
 
+    }
+
+    @Override
+    public void eliminarUsuario(UsuarioUi usuarioUi, Callback<UsuarioUi> callback) {
+
+
+
+        PersonUi personUi = usuarioUi.getPersonUi();
+
+        SQLite.delete(Persona.class)
+                .where(Persona_Table.personaId.eq(personUi.getId()))
+                .async()
+                .execute();
+        SQLite.delete(Usuario.class)
+                .where(Usuario_Table.usuarioId.eq(usuarioUi.getId()))
+                .async()
+                .execute();
+        callback.onLoad(true, usuarioUi);
+
+    }
+
+    @Override
+    public void editarUsuario(UsuarioUi usuarioUi, Callback<UsuarioUi> callback) {
+
+        Log.d("UsuarioLocalDataSOurce","editarUsuario: "+usuarioUi.getId());
+        try {
+            PersonUi personUi = usuarioUi.getPersonUi();
+
+            Persona persona = SQLite.select().from(Persona.class)
+                    .where(Persona_Table.personaId.eq(personUi.getId()))
+                    .querySingle();
+
+
+            //persona.setPersonaId(persona.getPersonaId());
+            persona.setNombres(personUi.getNombre());
+            persona.setApellidos(personUi.getApellido());
+            persona.setCelular(personUi.getTelefono());
+
+            if (!persona.save())throw new Error("Error al editar Persona");
+
+            Usuario usuario = SQLite.select().from(Usuario.class)
+                    .where(Usuario_Table.usuarioId.eq(personUi.getId()))
+                    .querySingle();
+
+            //usuario.setUsuarioId(usuarioUi.getId());
+            usuario.setUsuario(usuarioUi.getNombre());
+            usuario.setPassword(usuarioUi.getClave());
+
+            //usuario.setPersonaId(persona.getPersonaId());
+            if (!usuario.save())throw  new Error("Error al editar Usuario");
+
+            callback.onLoad(true,usuarioUi);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            callback.onLoad(false, null);
+        }
+
+
+    }
+
+    @Override
+    public void getUsuario(UsuarioUi usuarioUi, Callback<UsuarioUi> callback) {
+
+
+        PersonUi personUi = usuarioUi.getPersonUi();
+
+        Persona persona = SQLite.select().from(Persona.class)
+                .where(Persona_Table.personaId.eq(personUi.getId()))
+                .querySingle();
+
+
+        personUi.setId(persona.getPersonaId());
+        personUi.setNombre(persona.getNombres());
+        personUi.setApellido(persona.getApellidos());
+        personUi.setTelefono(persona.getCelular());
+
+        Usuario usuario = SQLite.select().from(Usuario.class)
+                .where(Usuario_Table.usuarioId.eq(usuarioUi.getId()))
+                .querySingle();
+
+        usuarioUi.setId(usuario.getUsuarioId());
+        usuarioUi.setNombre(usuario.getUsuario());
+        usuarioUi.setClave(usuario.getPassword());
+
+        usuarioUi.setPersonUi(personUi);
+
+
+        callback.onLoad(true, usuarioUi);
     }
 }

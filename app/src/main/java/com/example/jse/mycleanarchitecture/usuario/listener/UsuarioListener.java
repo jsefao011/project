@@ -1,5 +1,6 @@
 package com.example.jse.mycleanarchitecture.usuario.listener;
 
+import com.example.jse.mycleanarchitecture.model.dbflow.Usuario;
 import com.example.jse.mycleanarchitecture.usuario.entities.UsuarioUi;
 
 /**
@@ -9,4 +10,6 @@ import com.example.jse.mycleanarchitecture.usuario.entities.UsuarioUi;
 public interface UsuarioListener {
     void onClickUsuario(UsuarioUi usuarioUi);
     void onClickRemoveUsuario(UsuarioUi usuarioUi);
+    void onCLickTraerUsuario(UsuarioUi usuarioUi);
+
 }

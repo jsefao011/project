@@ -34,4 +34,6 @@ public interface UsuarioView extends BaseView<UsuarioPresenter> {
 
 
     void showMenssage(String mensaje);
+
+    void removeItemUser(UsuarioUi usuarioUi);
 }
