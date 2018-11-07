@@ -26,6 +26,7 @@ public class UsuarioPresenterImpl implements UsuarioPresenter {
    private  DeletePersona deletePersona;
    private UpdatePersona updatePersona;
    private GetUsuario getUsuario;
+   private UsuarioUi usuarioUi;
 
     public UsuarioPresenterImpl(UseCaseHandler useCaseHandler, SavePersona savePersona, GetPersonas getPersonas, DeletePersona deletePersona, UpdatePersona updatePersona, GetUsuario getUsuario) {
         this.useCaseHandler = useCaseHandler;
@@ -66,6 +67,12 @@ public class UsuarioPresenterImpl implements UsuarioPresenter {
         if (view==null)return;
         view.showListaUsuario();
         view.hideFormularioUsuario();
+
+        int count = 0;
+        for (UsuarioUi usuarioUi: usuarioUiList){
+            count++;
+            usuarioUi.setNumero(count);
+        }
         view.setListaUsuario(usuarioUiList);
     }
 
@@ -106,7 +113,12 @@ public class UsuarioPresenterImpl implements UsuarioPresenter {
         if(isViewNull())return;
         view.showFormularioUsuario();
         view.hideListarUsuario();
-
+        usuarioUi = null;
+        view.setNombreUSuario("");
+        view.setPassword("");
+        view. setNombrePersona("");
+        view.setApellidoPersona("");
+        view.setTelefonoPersona("");
     }
 
 
@@ -115,6 +127,13 @@ public class UsuarioPresenterImpl implements UsuarioPresenter {
         if(isViewNull())return;
         view.showFormularioUsuario();
         view.hideListarUsuario();
+        this.usuarioUi = usuarioUi;
+        view.setNombreUSuario(usuarioUi.getNombre());
+        view.setPassword(usuarioUi.getClave());
+        PersonUi personUi = usuarioUi.getPersonUi();
+        view. setNombrePersona(personUi.getNombre());
+        view.setApellidoPersona(personUi.getApellido());
+        view.setTelefonoPersona(personUi.getTelefono());
     }
 
     @Override
@@ -157,7 +176,17 @@ public class UsuarioPresenterImpl implements UsuarioPresenter {
         personUi.setTelefono(telefono);
 
         usuarioUi.setPersonUi(personUi);
-        savePersona(usuarioUi);
+
+        if(this.usuarioUi==null){
+            savePersona(usuarioUi);
+        }else {
+            usuarioUi.setId(this.usuarioUi.getId());
+            personUi.setId(this.usuarioUi.getPersonUi().getId());
+            updatePersona(usuarioUi);
+        }
+
+
+
     }
 
     private void savePersona(final UsuarioUi usuarioUi) {
@@ -165,8 +194,7 @@ public class UsuarioPresenterImpl implements UsuarioPresenter {
                 new UseCase.UseCaseCallback<SavePersona.Response>() {
                     @Override
                     public void onSuccess(SavePersona.Response response) {
-                        usuarioUiList.add(response.getUsuarioUi());
-                        showUsuario(usuarioUiList);
+                        getPersonas();
                     }
 
                     @Override
@@ -174,20 +202,6 @@ public class UsuarioPresenterImpl implements UsuarioPresenter {
                         if(view!=null)view.showMenssage("No guardo el Usuario");
                     }
                 });
-    }
-    @Override
-    public void onClickUpdate(String nombre, String apellido, String telefono, String usuario, String password) {
-        UsuarioUi usuarioUi = new UsuarioUi();
-        usuarioUi.setNombre(usuario);
-        usuarioUi.setClave(password);
-
-        PersonUi personUi = new PersonUi();
-        personUi.setNombre(nombre);
-        personUi.setApellido(apellido);
-        personUi.setTelefono(telefono);
-
-        usuarioUi.setPersonUi(personUi);
-        updatePersona(usuarioUi);
     }
 
     @Override
@@ -201,7 +215,7 @@ public class UsuarioPresenterImpl implements UsuarioPresenter {
                 new UseCase.UseCaseCallback<GetUsuario.Response>() {
                     @Override
                     public void onSuccess(GetUsuario.Response response) {
-                        onClickUsuario(usuarioUi);
+                        onClickUsuario(response.getUsuarioUi());
                     }
 
                     @Override
@@ -211,13 +225,12 @@ public class UsuarioPresenterImpl implements UsuarioPresenter {
                 });
         }
 
-    private void updatePersona(UsuarioUi usuarioUi) {
+    private void updatePersona(final UsuarioUi usuarioUi) {
         useCaseHandler.execute(updatePersona, new UpdatePersona.Request(usuarioUi),
                 new UseCase.UseCaseCallback<UpdatePersona.Response>() {
                     @Override
                     public void onSuccess(UpdatePersona.Response response) {
-                        usuarioUiList.add(response.getUsuarioUi());
-                        showUsuario(usuarioUiList);
+                        getPersonas();
                     }
 
                     @Override
@@ -232,6 +245,7 @@ public class UsuarioPresenterImpl implements UsuarioPresenter {
     public void onClickCancelarUsuario() {
        showUsuario(usuarioUiList);
     }
+
 
     private boolean isViewNull(){
         if(view==null)return true;

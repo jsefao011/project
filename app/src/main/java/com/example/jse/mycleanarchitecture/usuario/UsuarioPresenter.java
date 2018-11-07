@@ -15,9 +15,8 @@ public interface UsuarioPresenter extends BasePresenter<UsuarioView> {
     void onClickUsuario(UsuarioUi usuarioUi);
     void onClickRemoveUsuario(UsuarioUi usuarioUi);
     void onClickSaveUsuario(String nombre, String apellido, String telefono, String usuario, String password);
-    void onClickUpdate(String nombre, String apellido, String telefono, String usuario, String password);
     void onClickGetUsuario(UsuarioUi usuarioUi);
-
     void onClickCancelarUsuario();
+
 }
 

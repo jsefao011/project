@@ -275,12 +275,6 @@ public class UsuarioActivity extends AppCompatActivity implements UsuarioView, U
     @Override
     public void onClickUsuario(UsuarioUi usuarioUi) {
         usuarioPresenter.onClickUsuario(usuarioUi);
-        setNombreUSuario(usuarioUi.getNombre());
-        setPassword(usuarioUi.getClave());
-        PersonUi personUi = usuarioUi.getPersonUi();
-        setNombrePersona(personUi.getNombre());
-        setApellidoPersona(personUi.getApellido());
-        setTelefonoPersona(personUi.getTelefono());
     }
 
     @Override
@@ -311,13 +305,7 @@ public class UsuarioActivity extends AppCompatActivity implements UsuarioView, U
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_guardar:
-
-                /*usuarioPresenter.onClickSaveUsuario(inpTextNombre.getText().toString(),
-                        inpTextApellido.getText().toString(), inpTelefono.getText().toString(),
-                        inpUsuario.getText().toString(),
-                        inpPassword.getText().toString());*/
-
-                usuarioPresenter.onClickUpdate(inpTextNombre.getText().toString(),
+                usuarioPresenter.onClickSaveUsuario(inpTextNombre.getText().toString(),
                         inpTextApellido.getText().toString(), inpTelefono.getText().toString(),
                         inpUsuario.getText().toString(),
                         inpPassword.getText().toString());

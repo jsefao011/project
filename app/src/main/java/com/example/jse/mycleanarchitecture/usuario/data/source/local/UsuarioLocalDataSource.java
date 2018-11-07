@@ -19,7 +19,6 @@ public class UsuarioLocalDataSource implements UsuarioDataSource {
     @Override
     public void guardarUsuario(UsuarioUi usuarioUi, Callback<UsuarioUi> callback) {
 
-
         try{
 
             Persona persona = SQLite.select()
@@ -56,6 +55,7 @@ public class UsuarioLocalDataSource implements UsuarioDataSource {
             if (!nuevoUsuario.save())throw  new Error("Error al guardar Usuario");
 
             usuarioUi.setId(usuarioId);
+            personUi.setId(personaId);
             callback.onLoad(true,usuarioUi);
         }catch (Exception e){
             e.printStackTrace();
@@ -73,12 +73,12 @@ public class UsuarioLocalDataSource implements UsuarioDataSource {
         List<Usuario> usuarioList = SQLite.select()
                 .from(Usuario.class)
                 .queryList();
+
         for (Usuario usuario:usuarioList){
             Persona persona = SQLite.select().from(Persona.class)
                     .where(Persona_Table.personaId.eq(usuario.getPersonaId()))
                     .querySingle();
             if (persona==null)continue;
-
 
             PersonUi personUi = new PersonUi();
             personUi.setId(persona.getPersonaId());
@@ -90,7 +90,6 @@ public class UsuarioLocalDataSource implements UsuarioDataSource {
             usuarioUi.setId(usuario.getUsuarioId());
             usuarioUi.setNombre(usuario.getUsuario());
             usuarioUi.setClave(usuario.getPassword());
-
             usuarioUi.setPersonUi(personUi);
 
             usuarioUiList.add(usuarioUi);
